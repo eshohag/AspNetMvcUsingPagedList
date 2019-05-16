@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using AspNetMvcUsingPagedList.Models;
+using PagedList;
 
 namespace AspNetMvcUsingPagedList.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        ApplicationDbContext db = new ApplicationDbContext();
+        public ActionResult Index(int? page, int pageSize = 5)
         {
-            return View();
+            var initialStudents = db.Students.ToList().OrderByDescending(a => a.Id).ToPagedList(page ?? 1, pageSize);
+
+            return View(initialStudents);
         }
 
         public ActionResult About()
